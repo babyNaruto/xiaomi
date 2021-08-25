@@ -171,6 +171,79 @@ define(["jquery","jquery-cookie"],function ($){
             }
         })
     }
+
+    //添加轮播效果
+    function banner() {
+        //设置全局变量
+        var iNow = 0;
+        var aBtns = null;  //获取页面上所有的按钮
+        var aImgs = null;  //获取所有的图片
+
+        //启动一个定时器
+        var timer = setInterval(function (){
+            iNow++;
+            tab();
+        },3000);
+
+        //点击按钮完成切换--事件委托
+        $("#app div").on("click",".ui-controls .ui-pager .ui-pager-item a",function (){
+            //获取当前点击的父节点在兄弟节点的下标
+            iNow= $(this).parent().index();
+            tab();
+
+
+            return false;
+        })
+
+        //鼠标移入移出效果
+        $("#app div").on("mouseenter","#J_img",function (){
+            clearInterval(timer);
+        })
+        $("#app div").on("mouseleave","#J_img",function (){
+            timer = setInterval(function (){
+                iNow++;
+                tab();
+            },3000);
+        })
+
+        //上一张下一张切换效果
+        $("#app div").on("click",".ui-prev, .ui-next",function (){
+
+            if (this.className == "ui-prev"){
+                iNow--;
+                if (iNow == -1){
+                    iNow = 4;
+                }
+            }else{
+                iNow++
+            }
+            tab();
+            return false;
+        })
+
+        //切换的方法
+        function tab() {
+            if (!aImgs){
+                aImgs = $("#J_img").find("img");
+
+            }
+            if (!aBtns){
+                aBtns = $("#J_img").find(".ui-controls .ui-pager .ui-pager-item a");
+
+            }
+            if (aImgs.size() == 1){
+                clearInterval(timer);
+            }else{
+                if (iNow == aBtns.size()){
+                    iNow = 0;
+                }
+                aBtns.removeClass("active").eq(iNow).addClass("active");
+                aImgs.hide().eq(iNow).show();
+            }
+
+        }
+
+    }
     //获取到当前的要加载的商品的数据==通过name值获取value值
     //?name1=value1&name2=value2
     function valueByName(search,name){
@@ -190,6 +263,7 @@ define(["jquery","jquery-cookie"],function ($){
         }
     }
     return {
-        download: download
+        download: download,
+        banner: banner()
     }
 })

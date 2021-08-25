@@ -21,6 +21,7 @@ require(['nav','goodsDesc'],function (nav,goodsDesc){
     nav.searchTab();
 
     goodsDesc.download();
+    goodsDesc.banner();
 
 
 })
