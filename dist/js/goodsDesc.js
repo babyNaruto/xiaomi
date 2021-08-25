@@ -215,7 +215,7 @@ define(["jquery","jquery-cookie"],function ($){
                     iNow = 4;
                 }
             }else{
-                iNow++
+                iNow++;
             }
             tab();
             return false;
