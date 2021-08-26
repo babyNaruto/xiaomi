@@ -243,6 +243,52 @@ define(["jquery","jquery-cookie"],function ($){
 
         }
 
+        //加入购物车，添加点击操作
+        $("#app div").on("click",".J_login",function (){
+            //获取当前点击购物车按钮，商品ID
+            //使用cookie本地缓存，存商品的ID和数量
+            //[{id:1,num1},{id:2,num2}]转成json字符串存储在cookie中
+
+            var id = this.id;
+            //1.先去判断是不是第一次添加
+            var first = $.cookie("goods") == null ? true : false;
+
+            //2.如果是第一次添加
+            if (first){
+                //创建cookie
+                var cookieArr = [{id: id, num: 1}];
+                $.cookie("goods",JSON.stringify(cookieArr),{
+                    expires:7
+                })
+            }else{
+                //判断之前是否添加过
+                var same = false;  //假设没有添加过
+                var cookieStr = $.cookie("goods");
+                var cookieArr = JSON.parse(cookieStr);
+                for (var i = 0; i < cookieArr.length; i++) {
+                    if (cookieArr[i].id == id){
+                        //之前添加过商品
+                        cookieArr[i].num++;
+                        same = true;
+                        break;
+                    }
+                }
+                if (!same){
+                    //之前没有添加过，新增商品
+                    var obj = {id: id,num: 1};
+                    cookieArr.push(obj);
+                }
+                //最后都要存回cookie中
+                $.cookie("goods",JSON.stringify(cookieArr),{
+                    expires:7
+                })
+
+            }
+
+            alert($.cookie("goods"));
+            return false;
+        })
+
     }
     //获取到当前的要加载的商品的数据==通过name值获取value值
     //?name1=value1&name2=value2
