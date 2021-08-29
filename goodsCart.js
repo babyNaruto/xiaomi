@@ -99,6 +99,7 @@ define(["jquery","jquery-cookie"],function ($){
                                                 </div> `);
                         node.appendTo("#J_cartListBody .J_cartGoods")
                     }
+                    isCheckAll();
 
                 }
             })
@@ -187,17 +188,75 @@ define(["jquery","jquery-cookie"],function ($){
             }
 
             // alert($.cookie("goods"));
-
+            isCheckAll();
             return false;
         })
 
 
     }
 
+    //给全选按钮单选添加点击事件
+    function checkFun(){
+        //全选效果实现
+        $("#J_cartBox .list-head .col-check").find("i").click(function (){
+            //获取每一个单选框
+            var allChecks = $("#J_cartListBody").find(".item-row .col-check").find("i");
+
+            if ($(this).hasClass("icon-checkbox-selected")){
+                $(this).add(allChecks).removeClass("icon-checkbox-selected");
+            }else{
+                $(this).add(allChecks).addClass("icon-checkbox-selected");
+            }
+            isCheckAll();
+        })
+
+        //商品单选框实现
+        $("#J_cartListBody .J_cartGoods").on("click",".item-row .col-check i",function (){
+            if ($(this).hasClass("icon-checkbox-selected")){
+                $(this).removeClass("icon-checkbox-selected");
+            }else{
+                $(this).addClass("icon-checkbox-selected");
+            }
+            isCheckAll();
+        })
+    }
+
+    //判断有多少个被选中
+    function isCheckAll(){
+        var allChecks = $("#J_cartListBody").find(".item-row");
+        var isAll = true; //假设全部选择
+        var total = 0;  //计算总价
+        var count = 0;  //记录被选中的数量
+        var totalCount = 0;  //全部商品总数
+        allChecks.each(function (index,item){
+            if (!$(item).find(".col-check i").hasClass("icon-checkbox-selected")){
+                isAll = false;  //变成非全选状态
+            }else{
+                total += parseFloat($(item).find(".col-price").html().trim()) * parseFloat($(this).find(".col-num input").val());
+                count += parseInt($(item).find(".col-num input").val());
+
+            }
+            totalCount += parseInt($(item).find(".col-num input").val());
+        });
+        //设置结果到页面上
+        $("#J_selTotalNum").html(count);
+        $("#J_cartTotalNum").html(totalCount);
+        $("#J_cartTotalPrice").html(total);
+
+        //判断是否全选，全部单选后，自动勾选全选
+        if(isAll){
+            $("#J_cartBox .list-head .col-check").find("i").addClass("icon-checkbox-selected");
+        }else{
+            $("#J_cartBox .list-head .col-check").find("i").removeClass("icon-checkbox-selected");
+        }
+
+    }
+
     return {
         download: download,
         cartHover: cartHover,
-        loadCarData: loadCarData
+        loadCarData: loadCarData,
+        checkFun: checkFun
 
     }
 })

@@ -16,5 +16,6 @@ require(["goodsCart"],function (goodsCart){
     goodsCart.download();
     goodsCart.cartHover();
     goodsCart.loadCarData();
+    goodsCart.checkFun();
 
 })
