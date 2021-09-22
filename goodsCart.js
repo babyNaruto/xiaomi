@@ -3,6 +3,8 @@ define(["jquery","jquery-cookie"],function ($){
     //数据源=goodsCarList.json goodsList.json,找出加入购物车的数据
     //通过异步串行处理
     function loadCarData(){
+        //清空
+        $("#J_cartListBody .J_cartGoods").html("");
         new Promise(function (resolve,reject){
             $.ajax({
                 url: "../data/goodsCarList.json",
@@ -189,6 +191,7 @@ define(["jquery","jquery-cookie"],function ($){
 
             // alert($.cookie("goods"));
             isCheckAll();
+            loadCarData();
             return false;
         })
 
@@ -252,11 +255,66 @@ define(["jquery","jquery-cookie"],function ($){
 
     }
 
+    //给页面上的商品添加删除，数量增减操作
+        function changCars(){
+            //给每一个商品添加删除
+           $("#J_cartListBody .J_cartGoods").on("click", ".col-action .J_delGoods", function (){
+               var id = $(this).closest(".item-row").remove().attr("id");
+
+               //在cookie中删除数据
+               var cookieStr = $.cookie("goods");
+               var cookieArr = JSON.parse(cookieStr);
+               for (var i = 0; i < cookieArr.length; i++) {
+                   if (id == cookieArr[i].id){
+                       //删除数据
+                       cookieArr.split(i, 1);
+                       break
+                   }
+               }
+               isCheckAll();
+               return false;  //阻止a标签默认行为
+           })
+            // 给+ 和 - 添加事件
+            $("#J_cartListBody .J_cartGoods").on("click", ".J_minus,.J_plus" ,function (){
+                //1.找到所有商品的id
+                var id = $(this).closest(".item-row").attr("id");
+                var cookieStr = $.cookie("goods");
+                var cookieArr = JSON.parse(cookieStr);
+                for (var i = 0; i < cookieArr.length; i++) {
+                    if (id == cookieArr[i].id){
+                        //找到该用户
+                        if(this.className == "J_minus"){
+                            //数量 -1
+                            cookieArr[i].num == 1 ? alert("数量为1，不能再减少") : cookieArr[i].num--;
+
+                        }else {
+                            cookieArr[i].num++;
+                        }
+                        break;
+                    }
+                }
+                //更新页面商品数据
+                $(this).siblings("input").val(cookieArr[i].num);
+                //更新一下页面上单个商品的价格
+                var price = parseFloat($(this).closest(".col-num").siblings(".col-price").html().trim());
+                $(this).closest(".col-num").siblings(".col-total").html((price * cookieArr[i].num).toFixed())
+
+                //最后更改数据存储到cookie
+                $.cookie("goods", JSON.stringify(cookieArr), {
+                    expires: 7
+                })
+                //重新计算一次总价
+                isCheckAll()
+
+                return false
+            })
+    }
     return {
         download: download,
         cartHover: cartHover,
         loadCarData: loadCarData,
-        checkFun: checkFun
+        checkFun: checkFun,
+        changCars: changCars
 
     }
 })

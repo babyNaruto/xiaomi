@@ -17,5 +17,6 @@ require(["goodsCart"],function (goodsCart){
     goodsCart.cartHover();
     goodsCart.loadCarData();
     goodsCart.checkFun();
+    goodsCart.changCars();
 
 })
