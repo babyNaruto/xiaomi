@@ -7,7 +7,7 @@ define(["jquery","jquery-cookie"],function ($){
         $("#J_cartListBody .J_cartGoods").html("");
         new Promise(function (resolve,reject){
             $.ajax({
-                url: "../data/goodsCarList.json",
+                url: "/data/goodsCarList.json",
                 success: function (obj){
                     resolve(obj.data);
                 },
@@ -20,7 +20,7 @@ define(["jquery","jquery-cookie"],function ($){
             //下载第二部分代码
             return new Promise(function (resolve,reject){
                 $.ajax({
-                    url: "../data/goodsList2.json",
+                    url: "/data/goodsList2.json",
                     success: function (arr2){
                         //将两份数据合并
                         var newArr = arr1.concat(arr2);
@@ -112,7 +112,7 @@ define(["jquery","jquery-cookie"],function ($){
 
     function download(){
         $.ajax({
-            url: "../data/goodsCarList.json",
+            url: "/data/goodsCarList.json",
             success: function (obj){
                 var arr = obj.data;
                 for (var i = 0; i < arr.length; i++) {

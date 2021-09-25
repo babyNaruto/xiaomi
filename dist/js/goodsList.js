@@ -3,7 +3,7 @@ define(["jquery"],function ($) {
     function download(){
         $.ajax({
             type: "get",
-            url: "../data/goodsList2.json",
+            url: "/data/goodsList2.json",
             success: function (arr){
                 // alert(arr);
                 //加载大图数据到页面上
