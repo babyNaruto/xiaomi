@@ -1,7 +1,7 @@
 # xiaomi
 
 #### 介绍
-![首页](https://github.com/babyNaruto/xiaomi/小米首页.png)
+![首页](https://github.com/babyNaruto/xiaomi/blob/master/%E5%B0%8F%E7%B1%B3%E9%A6%96%E9%A1%B5.png)
 
 #### 软件架构
 软件架构说明
